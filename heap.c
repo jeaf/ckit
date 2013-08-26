@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 
 void swap(int* v1, int* v2)
@@ -23,7 +24,7 @@ void heapify(int a[], int count, int root)
 
     // Determine which of root,left,right is the largest
     int largest = root;
-    if (left < count && a[root] < a[left])
+    if (left < count && a[largest] < a[left])
     {
         largest = left;
     }
@@ -49,12 +50,41 @@ heapbuild(int a[], int count)
     }
 }
 
-void heappush()
+void heappush(int a[], int count)
 {
+    assert(a);
+    assert(count > 0);
+
+    // We assume that the last element of the array must be pushed, i.e.,
+    // the actual heap consists of elements 0 to count-2, and element
+    // count-1 is the element to push
+    
+    int i = count - 1;
+    int parent = floor((i - 1) / 2.0);
+    while (parent >= 0)
+    {
+        if (a[parent] < a[i])
+        {
+            swap(&a[parent], &a[i]);
+            i = parent;
+            parent = floor((i - 1) / 2.0);
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 
-void heappop()
+int heappop(int a[], int count)
 {
+    assert(a);
+    assert(count > 0);
+
+    int top = a[0];
+    swap(&a[0], &a[count - 1]);
+    heapify(a, count - 1, 0);
+    return top;
 }
 
 void heapsort(int a[], int count)
@@ -90,7 +120,6 @@ int main()
 {
     int a[] = {3,4,9,1,2,13,8,14};
     int a_size = sizeof(a) / sizeof(int);
-    //heapbuild(a, a_size);
     heapsort(a, a_size);
     heapprint(a, a_size);
     return 0;
