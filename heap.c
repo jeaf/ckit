@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "heap.h"
+
 void swap(int* v1, int* v2)
 {
     assert(v1);
@@ -39,7 +41,7 @@ void heapify(int a[], int count, int root)
     }
 }
 
-heapbuild(int a[], int count)
+void heapbuild(int a[], int count)
 {
     assert(a);
 
@@ -114,14 +116,5 @@ void heapprint(int a[], int count)
         printf("\n");
         c *= 2;
     }
-}
-
-int main()
-{
-    int a[] = {3,4,9,1,2,13,8,14};
-    int a_size = sizeof(a) / sizeof(int);
-    heapsort(a, a_size);
-    heapprint(a, a_size);
-    return 0;
 }
 
