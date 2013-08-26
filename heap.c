@@ -59,6 +59,14 @@ void heappop()
 
 void heapsort(int a[], int count)
 {
+    assert(a);
+
+    heapbuild(a, count);
+    for (int i = count - 1; i > 0; --i)
+    {
+        swap(&a[0], &a[i]);
+        heapify(a, i, 0);
+    }
 }
 
 void heapprint(int a[], int count)
@@ -82,7 +90,8 @@ int main()
 {
     int a[] = {3,4,9,1,2,13,8,14};
     int a_size = sizeof(a) / sizeof(int);
-    heapbuild(a, a_size);
+    //heapbuild(a, a_size);
+    heapsort(a, a_size);
     heapprint(a, a_size);
     return 0;
 }
