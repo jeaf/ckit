@@ -1,3 +1,4 @@
+import collections
 import itertools
 import re
 
@@ -10,13 +11,14 @@ oth_incs = 'test_struct'.split()
 # The print regular expression
 print_re = re.compile(r'\$print\{(.*)}')
 
-# The versions of data structures we need to generate
-versions = {'array': 'int test_struct'.split(),
-            'heap' : 'int test_struct'.split()}
+# The instances of data structures we need to generate
+Inst = collections.namedtuple('Inst', 'type_ print_')
+instances = {'array': [Inst('int', r'printf("%d", \1)'), Inst('test_struct', r'print_test_struct(\1)')],
+             'heap' : [Inst('int', r'printf("%d", \1)')]}
 
 # Read all input files
 lines = dict()
-for name in versions:
+for name in instances:
     lines[name] = dict()
     for ext in 'c h'.split():
         with open(name + '.' + ext, 'r') as f:
@@ -36,12 +38,12 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
 
     # Write actual content
     outf = {'c': outf_c, 'h': outf_h}
-    for name, types in versions.iteritems():
-        for t in types:
+    for name, insts in instances.iteritems():
+        for instance in insts:
             for ext, f in outf.iteritems():
                 for line in lines[name][ext]:
-                    line = line.replace('$type', t)
-                    line = print_re.sub(r'printf("%d", \1)', line)
+                    line = line.replace('$type', instance.type_)
+                    line = print_re.sub(instance.print_, line)
                     f.write(line)
 
     # Write final stuff to both files
