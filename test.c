@@ -19,9 +19,13 @@ void test_array()
     ts.c     = 'z';
     ts.d[22] = 3.0;
     array_test_struct b;
-    array_int_construct(&b);
-    array_int_pushback(&b, ts);
-    array_int_destruct(&b);
+    array_test_struct_construct(&b);
+    array_test_struct_pushback(&b, ts);
+    ts.a = 987;
+    ts.b = 0.0f;
+    array_test_struct_pushback(&b, ts);
+    array_test_struct_print(b.data, b.size);
+    array_test_struct_destruct(&b);
 }
 
 void test_heap()
