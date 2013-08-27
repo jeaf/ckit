@@ -5,12 +5,12 @@
 void test_array()
 {
     printf("Testing array\n");
-    array a;
-    array_construct(&a);
-    array_pushback(&a, 3);
-    array_pushback(&a, 7);
-    array_print(a.data, a.size);
-    array_destruct(&a);
+    array_int a;
+    array_int_construct(&a);
+    array_int_pushback(&a, 3);
+    array_int_pushback(&a, 7);
+    array_int_print(a.data, a.size);
+    array_int_destruct(&a);
 }
 
 void test_heap()
@@ -19,7 +19,7 @@ void test_heap()
     int a[] = {3,4,9,1,2,13,8,14};
     int a_size = sizeof(a) / sizeof(int);
     heapsort(a, a_size);
-    array_print(a, a_size);
+    array_int_print(a, a_size);
 }
 
 int main()

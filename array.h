@@ -1,12 +1,12 @@
 typedef struct
 {
-    int* data;
+    $type* data;
     int  size;
     int  capacity;
-} array;
+} array_$type;
 
-void array_construct(array* a);
-void array_pushback(array* a, int val);
-void array_print(int a[], int count);
-void array_destruct(array* a);
+void array_$type_construct(array_$type* a);
+void array_$type_pushback(array_$type* a, $type val);
+void array_$type_print($type a[], int count);
+void array_$type_destruct(array_$type* a);
 
