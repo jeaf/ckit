@@ -1,8 +1,8 @@
+#include "heap.h"
+
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
-
-#include "heap.h"
 
 void swap(int* v1, int* v2)
 {

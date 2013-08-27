@@ -1,11 +1,15 @@
-TCC          = $(USERPROFILE)\app\tcc\tcc.exe
+TCC      = $(USERPROFILE)\app\tcc\tcc.exe
+TCC_OPTS = -Wall
 
-test.exe: heap.o test.o
+test.exe: array.o heap.o test.o
 	$(TCC) -o $@ $+
 
-heap.o: heap.c heap.h
-	$(TCC) -c $<
+array.o: array.c array.h
+	$(TCC) $(TCC_OPTS) -c $<
 
-test.o: test.c heap.h
-	$(TCC) -c $<
+heap.o: heap.c heap.h
+	$(TCC) $(TCC_OPTS) -c $<
+
+test.o: test.c array.h heap.h
+	$(TCC) $(TCC_OPTS) -c $<
 
