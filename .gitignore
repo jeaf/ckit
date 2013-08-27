@@ -19,3 +19,7 @@
 # Vim temp files
 *.swp
 
+# ckit amalgamation (generated)
+ckit.c
+ckit.h
+

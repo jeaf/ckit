@@ -1,10 +1,3 @@
-#include "array.h"
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 void array_construct(array* a)
 {
     assert(a);

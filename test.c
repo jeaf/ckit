@@ -1,5 +1,4 @@
-#include "array.h"
-#include "heap.h"
+#include "ckit.h"
 
 #include <stdio.h>
 
