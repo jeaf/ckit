@@ -8,7 +8,7 @@ test.exe: ckit.o test.o test_struct.o
 ckit.o: ckit.c ckit.h
 	$(TCC) $(TCC_OPTS) -c $<
 
-ckit.c: array.c array.h heap.c heap.h create_amalgamation.py
+ckit.c: array.c array.h heap.c heap.h ckit.config create_amalgamation.py
 	$(PYTHON) create_amalgamation.py
 
 test_struct.o: test_struct.c test_struct.h
