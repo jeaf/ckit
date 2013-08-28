@@ -19,11 +19,12 @@ std_incs = 'assert math stdio stdlib string'.split()
 print_re = re.compile(r'\$print\{(.*)}')
 
 # Read all input files
+script_dir = os.path.abspath(os.path.dirname(__file__))
 lines = dict()
 for compname in config['components']:
     lines[compname] = dict()
     for ext in 'c h'.split():
-        with open(compname + '.' + ext, 'r') as f:
+        with open(os.path.join(script_dir, compname) + '.' + ext, 'r') as f:
             lines[compname][ext] = f.readlines()
 
 # Write output files
