@@ -7,11 +7,11 @@ void test_array()
 {
     printf("Testing array\n");
     array_int a;
-    array_int_construct(&a);
-    array_int_pushback(&a, 3);
-    array_int_pushback(&a, 7);
-    array_int_print(a.data, a.size);
-    array_int_destruct(&a);
+    array_int_ctor(&a);
+    *array_int_pushback(&a) = 3;
+    *array_int_pushback(&a) = 7;
+    array_int_print(&a);
+    array_int_dtor(&a);
 
     test_struct ts;
     ts.a     = 43;
@@ -19,13 +19,13 @@ void test_array()
     ts.c     = 'z';
     ts.d[22] = 3.0;
     array_test_struct b;
-    array_test_struct_construct(&b);
-    array_test_struct_pushback(&b, ts);
+    array_test_struct_ctor(&b);
+    *array_test_struct_pushback(&b) = ts;
     ts.a = 987;
     ts.b = 0.0f;
-    array_test_struct_pushback(&b, ts);
-    array_test_struct_print(b.data, b.size);
-    array_test_struct_destruct(&b);
+    *array_test_struct_pushback(&b) = ts;
+    array_test_struct_print(&b);
+    array_test_struct_dtor(&b);
 }
 
 void test_heap()
@@ -34,7 +34,6 @@ void test_heap()
     int a[] = {3,4,9,1,2,13,8,14};
     int a_size = sizeof(a) / sizeof(int);
     heapsort(a, a_size);
-    array_int_print(a, a_size);
 }
 
 int main()

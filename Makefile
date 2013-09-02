@@ -1,5 +1,6 @@
 TCC      = $(USERPROFILE)\app\tcc\tcc.exe
-TCC_OPTS = -Wall
+TCC_OPTS = -Wall -g
+# TCC_OPTS = -Wall -g -DNDEBUG
 PYTHON   = C:\Python27\python.exe
 
 test.exe: ckit.o test.o test_struct.o
