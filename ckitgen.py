@@ -43,6 +43,11 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
     outf = {'c': outf_c, 'h': outf_h}
     for compname, typenames in config['components'].iteritems():
         for typename in typenames:
+            if 'def' in config['types'][typename]:
+                outf_h.write('typedef struct\n{\n')
+                for member in config['types'][typename]['def']:
+                    outf_h.write('    ' + member + ';\n')
+                outf_h.write('} ' + typename + ';\n\n')
             for ext, f in outf.iteritems():
                 for line in lines[compname][ext]:
                     line = line.replace('$type', typename)
