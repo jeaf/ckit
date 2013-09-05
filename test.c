@@ -42,6 +42,23 @@ void test_heap()
     *array_int_pushback(&a) = 8;
     heapsort_int(a.data, a.size);
     array_int_print(&a);
+
+    array_point ap;
+    array_point_ctor(&ap);
+    point p;
+    p.x = 1;
+    p.y = 2;
+    p.z = 5;
+    *array_point_pushback(&ap) = p;
+    p.x = 2;
+    p.z = 4;
+    *array_point_pushback(&ap) = p;
+    p.x = 5;
+    p.z = 1;
+    *array_point_pushback(&ap) = p;
+    heapsort_point(ap.data, ap.size);
+    array_point_print(&ap);
+
 }
 
 int main()
