@@ -41,11 +41,11 @@ void array_$type_print(array_$type* a)
     printf("[");
     if (a->size)
     {
-        $print{a->data[0]};
+        $print{a->data[0]}
         for (unsigned i = 1; i < a->size; ++i)
         {
             printf(",");
-            $print{a->data[i]};
+            $print{a->data[i]}
         }
     }
     printf("]\n");

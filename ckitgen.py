@@ -8,7 +8,7 @@ import sys
 def process_config_blocks(s):
     if s.find('{') < 0:
         return s
-    d     = dict()
+    d     = collections.OrderedDict()
     name  = ''
     block = ''
     depth = 0
@@ -40,16 +40,20 @@ def load_config():
         return process_config_blocks(f.read())
 config = load_config()
 
+# Add default types
+config['int'] = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
+
 # The list of standard include files that we will need
 std_incs = 'assert math stdio stdlib string'.split()
 
-# The print regular expression
-print_re = re.compile(r'\$print\{(.*)}')
+# The template regular expressions
+print_re    = re.compile(r'\$print\{(.*)}')
+lessthan_re = re.compile(r'\$lessthan\{(.*),(.*)}')
 
 # Read all input files
 script_dir = os.path.abspath(os.path.dirname(__file__))
 lines = dict()
-for compname in config['components']:
+for compname in 'array heap'.split():
     lines[compname] = dict()
     for ext in 'c h'.split():
         with open(os.path.join(script_dir, compname) + '.' + ext, 'r') as f:
@@ -58,6 +62,8 @@ for compname in config['components']:
 # Write output files
 with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
 
+    outf = {'c': outf_c, 'h': outf_h}
+
     # Write initial stuff to both files
     outf_h.write('#ifndef CKIT_H\n#define CKIT_H\n\n')
     outf_c.write('#include "ckit.h"\n\n')
@@ -65,20 +71,25 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
         outf_c.write('#include <{}.h>\n'.format(inc))
     outf_c.write('\n')
 
-    # Write actual content
-    outf = {'c': outf_c, 'h': outf_h}
-    for compname, typenames in config['components'].iteritems():
-        for typename in typenames:
-            if 'def' in config['types'][typename]:
-                outf_h.write('typedef struct\n{\n')
-                for member in config['types'][typename]['def']:
-                    outf_h.write('    ' + member + ';\n')
-                outf_h.write('} ' + typename + ';\n\n')
+    # Loop through the types from the config file
+    for name, attrs in config.iteritems():
+        if 'struct' in attrs:
+            outf_h.write('typedef struct\n{\n')
+            for line in attrs['struct'].split('\n'):
+                outf_h.write('    ' + line.strip() + '\n')
+            outf_h.write('} ' + name + ';\n\n')
+        elif 'template' in attrs:
+            template_name = attrs['template']
+            typename      = attrs['type']
             for ext, f in outf.iteritems():
-                for line in lines[compname][ext]:
+                for line in lines[template_name][ext]:
                     line = line.replace('$type', typename)
-                    line = print_re.sub(config['types'][typename]['print'], line)
+                    line = print_re.sub(config[typename]['print'], line)
+                    if 'lessthan' in config[typename]:
+                        line = lessthan_re.sub(config[typename]['lessthan'], line)
                     f.write(line)
+        elif 'include' in attrs:
+            outf_h.write('#include "{}"\n\n'.format(attrs['include']))
 
     # Write final stuff to both files
     outf_h.write('#endif\n')

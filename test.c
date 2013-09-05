@@ -31,9 +31,17 @@ void test_array()
 void test_heap()
 {
     printf("Testing heap\n");
-    int a[] = {3,4,9,1,2,13,8,14};
-    int a_size = sizeof(a) / sizeof(int);
-    heapsort(a, a_size);
+    array_int a;
+    array_int_ctor(&a);
+    *array_int_pushback(&a) = 3;
+    *array_int_pushback(&a) = 4;
+    *array_int_pushback(&a) = 9;
+    *array_int_pushback(&a) = 1;
+    *array_int_pushback(&a) = 2;
+    *array_int_pushback(&a) = 13;
+    *array_int_pushback(&a) = 8;
+    heapsort_int(a.data, a.size);
+    array_int_print(&a);
 }
 
 int main()

@@ -1,14 +1,14 @@
-void swap(int* v1, int* v2)
+void heapswap_$type($type* v1, $type* v2)
 {
     assert(v1);
     assert(v2);
 
-    int tmp = *v2;
+    $type tmp = *v2;
     *v2 = *v1;
     *v1 = tmp;
 }
 
-void heapify(int a[], int count, int root)
+void heapify_$type($type a[], int count, int root)
 {
     assert(a);
     assert(root >= 0);
@@ -20,33 +20,33 @@ void heapify(int a[], int count, int root)
 
     // Determine which of root,left,right is the largest
     int largest = root;
-    if (left < count && a[largest] < a[left])
+    if (left < count && $lessthan{a[largest], a[left]})
     {
         largest = left;
     }
-    if (right < count && a[largest] < a[right])
+    if (right < count && $lessthan{a[largest], a[right]})
     {
         largest = right;
     }
     if (root != largest)
     {
-        swap(&a[root], &a[largest]);
-        heapify(a, count, largest);
+        heapswap_$type(&a[root], &a[largest]);
+        heapify_$type(a, count, largest);
     }
 }
 
-void heapbuild(int a[], int count)
+void heapbuild_$type($type a[], int count)
 {
     assert(a);
 
     // Heapify each node, starting from last parent, counting backwards
     for (int i = (count - 2) / 2; i >= 0; --i)
     {
-        heapify(a, count, i);
+        heapify_$type(a, count, i);
     }
 }
 
-void heappush(int a[], int count)
+void heappush_$type($type a[], int count)
 {
     assert(a);
     assert(count > 0);
@@ -59,9 +59,9 @@ void heappush(int a[], int count)
     int parent = floor((i - 1) / 2.0);
     while (parent >= 0)
     {
-        if (a[parent] < a[i])
+        if ($lessthan{a[parent], a[i]})
         {
-            swap(&a[parent], &a[i]);
+            heapswap_$type(&a[parent], &a[i]);
             i = parent;
             parent = floor((i - 1) / 2.0);
         }
@@ -72,43 +72,24 @@ void heappush(int a[], int count)
     }
 }
 
-int heappop(int a[], int count)
+void heappop_$type($type a[], int count)
 {
     assert(a);
     assert(count > 0);
 
-    int top = a[0];
-    swap(&a[0], &a[count - 1]);
-    heapify(a, count - 1, 0);
-    return top;
+    heapswap_$type(&a[0], &a[count - 1]);
+    heapify_$type(a, count - 1, 0);
 }
 
-void heapsort(int a[], int count)
+void heapsort_$type($type a[], int count)
 {
     assert(a);
 
-    heapbuild(a, count);
+    heapbuild_$type(a, count);
     for (int i = count - 1; i > 0; --i)
     {
-        swap(&a[0], &a[i]);
-        heapify(a, i, 0);
-    }
-}
-
-void heapprint(int a[], int count)
-{
-    assert(a);
-
-    int* i = a;
-    unsigned c = 1;
-    while (i != a+count)
-    {
-        for (unsigned k = 0; k < c && i != a+count; ++k)
-        {
-            printf("%d:%d    ", c+k, *i++);
-        }
-        printf("\n");
-        c *= 2;
+        heapswap_$type(&a[0], &a[i]);
+        heapify_$type(a, i, 0);
     }
 }
 

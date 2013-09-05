@@ -1,8 +1,7 @@
-void swap(int* v1, int* v2);
-void heapify(int a[], int count, int root);
-void heapbuild(int a[], int count);
-void heappush(int a[], int count);
-int  heappop(int a[], int count);
-void heapsort(int a[], int count);
-void heapprint(int a[], int count);
+void heapswap_$type ($type* v1, $type* v2);
+void heapify_$type  ($type a[], int count, int root);
+void heapbuild_$type($type a[], int count);
+void heappush_$type ($type a[], int count);
+void heappop_$type  ($type a[], int count);
+void heapsort_$type ($type a[], int count);
 
