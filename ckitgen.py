@@ -76,7 +76,7 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
         if 'struct' in attrs:
             outf_h.write('typedef struct\n{\n')
             for line in attrs['struct'].split('\n'):
-                outf_h.write('    ' + line.strip() + '\n')
+                outf_h.write('    {};\n'.format(line.strip()))
             outf_h.write('} ' + name + ';\n\n')
         elif 'template' in attrs:
             template_name = attrs['template']
