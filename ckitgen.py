@@ -47,6 +47,8 @@ config['int'] = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
 std_incs = 'assert math stdio stdlib string'.split()
 
 # The template regular expressions
+ctor_re     = re.compile(r'\$ctor\{(.*)}')
+dtor_re     = re.compile(r'\$dtor\{(.*)}')
 print_re    = re.compile(r'\$print\{(.*)}')
 lessthan_re = re.compile(r'\$lessthan\{(.*),(.*)}')
 
@@ -83,6 +85,16 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
             typename      = attrs['type']
             for ext, f in outf.iteritems():
                 for line in lines[template_name][ext]:
+                    if ctor_re.search(line):
+                        if 'ctor' in config[typename]:
+                            line = ctor_re.sub(config[typename]['ctor'], line)
+                        else:
+                            continue
+                    if dtor_re.search(line):
+                        if 'dtor' in config[typename]:
+                            line = dtor_re.sub(config[typename]['dtor'], line)
+                        else:
+                            continue
                     line = line.replace('$type', typename)
                     line = print_re.sub(config[typename]['print'], line)
                     if 'lessthan' in config[typename]:

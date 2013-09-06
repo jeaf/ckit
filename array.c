@@ -7,6 +7,10 @@ void array_$type_ctor(array_$type* a)
 void array_$type_dtor(array_$type* a)
 {
     assert(a);
+    for (unsigned i = 0; i < a->size; ++i)
+    {
+        $dtor{a->data[i]}
+    }
     free(a->data);
     #ifndef NDEBUG
         memset(a, 0, sizeof(array_$type));
@@ -25,6 +29,7 @@ $type* array_$type_pushback(array_$type* a)
         free(a->data);
         a->data = newdata;
     }
+    $ctor{a->data[a->size]}
     return &a->data[a->size++];
 }
 
@@ -33,6 +38,7 @@ void array_$type_popback(array_$type* a)
     assert(a);
     assert(a->size);
     --a->size;
+    $dtor{a->data[a->size]}
 }
 
 void array_$type_print(array_$type* a)
