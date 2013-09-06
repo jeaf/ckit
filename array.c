@@ -54,6 +54,6 @@ void array_$type_print(array_$type* a)
             $print{a->data[i]}
         }
     }
-    printf("]\n");
+    printf("]");
 }
 
