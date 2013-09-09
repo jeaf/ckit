@@ -45,6 +45,17 @@ void test_array()
     printf("\n");
 }
 
+void test_hashtbl()
+{
+    printf("Testing hashtbl\n");
+    hashtbl_int a;
+    hashtbl_int_ctor(&a);
+    *hashtbl_int_lookup(&a, 123) = -1;
+    *hashtbl_int_lookup(&a, 9999) = 3;
+    hashtbl_int_print(&a);
+    printf("\n");
+}
+
 void test_heap()
 {
     printf("Testing heap\n");
@@ -83,6 +94,7 @@ void test_heap()
 int main()
 {
     test_array();
+    test_hashtbl();
     test_heap();
     return 0;
 }

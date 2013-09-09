@@ -47,7 +47,7 @@ config = load_config()
 config['int'] = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
 
 # The list of standard include files that we will need
-std_incs = 'assert math stdio stdlib string'.split()
+std_incs = 'assert math stdbool stdio stdlib string'.split()
 
 # The template regular expressions
 ctor_re     = re.compile(r'\$ctor\{(.*)}')
