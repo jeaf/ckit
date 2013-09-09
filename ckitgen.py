@@ -5,6 +5,9 @@ from pprint import pprint
 import re
 import sys
 
+# The list of available templates
+templates = 'array hashtbl heap'.split()
+
 def process_config_blocks(s):
     if s.find('{') < 0:
         return s
@@ -55,7 +58,7 @@ lessthan_re = re.compile(r'\$lessthan\{(.*),(.*)}')
 # Read all input files
 script_dir = os.path.abspath(os.path.dirname(__file__))
 lines = dict()
-for compname in 'array heap'.split():
+for compname in templates:
     lines[compname] = dict()
     for ext in 'c h'.split():
         with open(os.path.join(script_dir, compname) + '.' + ext, 'r') as f:
