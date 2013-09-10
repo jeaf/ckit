@@ -13,15 +13,43 @@ void hashtbl_$type_dtor(hashtbl_$type* a)
     memset(a, 0, sizeof(hashtbl_$type));
 }
 
+$type* hashtbl_$type_get(hashtbl_$type* a, unsigned hash)
+{
+    assert(a);
+    assert(a->capacity > 0);
+    assert(a->items);
+    assert((a->capacity & (a->capacity - 1)) == 0); // must be power of 2
+    
+    unsigned hashidx = hash & (a->capacity - 1);
+    unsigned offset = 0;
+    while (offset < a->capacity)
+    {
+        unsigned idx = (hashidx + offset++) % a->capacity;
+        hashtbl_item* i = &a->items[idx];
+
+        // Slot is free, searching is over
+        if (i->state == FREE)
+        {
+            break;
+        }
+
+        // Slot is valid. If the hash matches, return it
+        else if (i->state == VALID && i->hash == hash)
+        {
+            return &i->data;
+        }
+    }
+
+    // Value not found
+    return 0;
+}
+
 $type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
 {
     assert(a);
-
-    // Capacity must be larger than 0
     assert(a->capacity > 0);
-
-    // Capacity must be a power of 2
-    assert((a->capacity & (a->capacity - 1)) == 0);
+    assert(a->items);
+    assert((a->capacity & (a->capacity - 1)) == 0); // must be power of 2
     
     unsigned hashidx = hash & (a->capacity - 1);
     unsigned offset = 0;

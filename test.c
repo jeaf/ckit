@@ -54,6 +54,30 @@ void test_hashtbl()
     *hashtbl_int_lookup(&a, 9999) = 3;
     hashtbl_int_print(&a);
     printf("\n");
+    printf("Value should be 3: %d\n", *hashtbl_int_lookup(&a, 9999));
+    printf("Value should be 3: %d\n", *hashtbl_int_get(&a, 9999));
+    printf("Value should be NULL: %d\n", hashtbl_int_get(&a, 44444));
+
+    // Add stuff until table needs to grow
+    *hashtbl_int_lookup(&a, 999    ) = 2;
+    *hashtbl_int_lookup(&a, 99     ) = 4;
+    *hashtbl_int_lookup(&a, 9      ) = 5;
+    *hashtbl_int_lookup(&a, 5      ) = 6;
+    *hashtbl_int_lookup(&a, 4      ) = 7;
+    *hashtbl_int_lookup(&a, 1239999) = 8;
+
+    // Remove an item and check if it was removed
+    printf("Before removal: %d\n", *hashtbl_int_get(&a, 5));
+    hashtbl_int_erase(&a, 5);
+    int* removed_val = hashtbl_int_get(&a, 5);
+    if (removed_val)
+    {
+        printf("After removal: failure: value was not removed.\n");
+    }
+    else
+    {
+        printf("After removal: success: value was correctly removed.\n");
+    }
 }
 
 void test_heap()
