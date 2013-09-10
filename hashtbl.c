@@ -1,3 +1,20 @@
+void hashtbl_$type_grow(hashtbl_$type* a)
+{
+    hashtbl_$type new_ht;
+    new_ht.size     = 0;
+    new_ht.capacity = a->capacity << 1;
+    new_ht.items    = calloc(new_ht.capacity, sizeof(hashtbl_item));
+    for (unsigned i = 0; i < a->capacity; ++i)
+    {
+        if (a->items[i].state == VALID)
+        {
+            *hashtbl_$type_lookup(&new_ht, a->items[i].hash) = a->items[i].data;
+        }
+    }
+    free(a->items);
+    *a = new_ht;
+}
+
 void hashtbl_$type_ctor(hashtbl_$type* a)
 {
     assert(a);
@@ -50,6 +67,12 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
     assert(a->capacity > 0);
     assert(a->items);
     assert((a->capacity & (a->capacity - 1)) == 0); // must be power of 2
+    
+    // First check if we need to grow the hashtbl
+    if (((float)a->size / a->capacity) > 0.3)
+    {
+        hashtbl_$type_grow(a);
+    }
     
     unsigned hashidx = hash & (a->capacity - 1);
     unsigned offset = 0;
