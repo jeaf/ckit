@@ -108,6 +108,7 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
     assert(insert_idx < a->capacity);
     a->items[insert_idx].state = VALID;
     a->items[insert_idx].hash  = hash;
+    $ctor{a->items[insert_idx].data};
     a->size++;
     return &a->items[insert_idx].data;
 }
@@ -127,6 +128,7 @@ void hashtbl_$type_erase(hashtbl_$type* a, unsigned hash)
         if (i->state == VALID && i->hash == hash)
         {
             i->state = ERASED;
+            $dtor{i->data}
             a->size--;
             return;
         }
