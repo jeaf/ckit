@@ -50,10 +50,13 @@ config['int'] = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
 std_incs = 'assert math stdbool stdio stdlib string'.split()
 
 # The template regular expressions
-ctor_re     = re.compile(r'\$ctor\{(.*)}')
-dtor_re     = re.compile(r'\$dtor\{(.*)}')
-print_re    = re.compile(r'\$print\{(.*)}')
-lessthan_re = re.compile(r'\$lessthan\{(.*),(.*)}')
+ctor_re      = re.compile(r'\$ctor\{(.*)}')
+dtor_re      = re.compile(r'\$dtor\{(.*)}')
+print_re     = re.compile(r'\$print\{(.*)}')
+print_key_re = re.compile(r'\$print_key\{(.*)}')
+lessthan_re  = re.compile(r'\$lessthan\{(.*),(.*)}')
+equals_re    = re.compile(r'\$equals\{(.*),(.*)}')
+hash_re      = re.compile(r'\$hash\{(.*)}')
 
 # Read all input files
 script_dir = os.path.abspath(os.path.dirname(__file__))
@@ -99,6 +102,14 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
                         else:
                             continue
                     line = line.replace('$type', typename)
+                    if 'key_type' in attrs:
+                        key_typename = attrs['key_type']
+                        line = line.replace('$key_type', key_typename)
+                        if 'hash' in config[key_typename]:
+                            line = hash_re.sub(config[key_typename]['hash'], line)
+                        if 'equals' in config[key_typename]:
+                            line = equals_re.sub(config[key_typename]['equals'], line)
+                        line = print_key_re.sub(config[key_typename]['print'], line)
                     line = print_re.sub(config[typename]['print'], line)
                     if 'lessthan' in config[typename]:
                         line = lessthan_re.sub(config[typename]['lessthan'], line)

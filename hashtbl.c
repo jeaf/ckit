@@ -8,7 +8,7 @@ void hashtbl_$type_grow(hashtbl_$type* a)
     {
         if (a->items[i].state == VALID)
         {
-            *hashtbl_$type_lookup(&new_ht, a->items[i].hash) = a->items[i].data;
+            *hashtbl_$type_lookup(&new_ht, a->items[i].key) = a->items[i].value;
         }
     }
     free(a->items);
@@ -30,14 +30,14 @@ void hashtbl_$type_dtor(hashtbl_$type* a)
     memset(a, 0, sizeof(hashtbl_$type));
 }
 
-$type* hashtbl_$type_get(hashtbl_$type* a, unsigned hash)
+$type* hashtbl_$type_get(hashtbl_$type* a, $key_type key)
 {
     assert(a);
     assert(a->capacity > 0);
     assert(a->items);
     assert((a->capacity & (a->capacity - 1)) == 0); // must be power of 2
     
-    unsigned hashidx = hash & (a->capacity - 1);
+    unsigned hashidx = $hash{key} & (a->capacity - 1);
     unsigned offset = 0;
     while (offset < a->capacity)
     {
@@ -50,10 +50,10 @@ $type* hashtbl_$type_get(hashtbl_$type* a, unsigned hash)
             break;
         }
 
-        // Slot is valid. If the hash matches, return it
-        else if (i->state == VALID && i->hash == hash)
+        // Slot is valid. If the key matches, return it
+        else if (i->state == VALID && $equals{i->key, key})
         {
-            return &i->data;
+            return &i->value;
         }
     }
 
@@ -61,7 +61,7 @@ $type* hashtbl_$type_get(hashtbl_$type* a, unsigned hash)
     return 0;
 }
 
-$type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
+$type* hashtbl_$type_lookup(hashtbl_$type* a, $key_type key)
 {
     assert(a);
     assert(a->capacity > 0);
@@ -74,7 +74,7 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
         hashtbl_$type_grow(a);
     }
     
-    unsigned hashidx = hash & (a->capacity - 1);
+    unsigned hashidx = $hash{key} & (a->capacity - 1);
     unsigned offset = 0;
     unsigned insert_idx = UINT_MAX;
     while (offset < a->capacity)
@@ -97,38 +97,38 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, unsigned hash)
             if (idx < insert_idx) insert_idx = idx;
         }
 
-        // Slot is valid. If the hash matches, return it
-        else if (i->hash == hash)
+        // Slot is valid. If the key matches, return it
+        else if ($equals{i->key, key})
         {
-            return &i->data;
+            return &i->value;
         }
     }
 
     // If we get here, it means the value was not found. Insert and return it.
     assert(insert_idx < a->capacity);
     a->items[insert_idx].state = VALID;
-    a->items[insert_idx].hash  = hash;
-    $ctor{a->items[insert_idx].data};
+    a->items[insert_idx].key   = key;
+    $ctor{a->items[insert_idx].value};
     a->size++;
-    return &a->items[insert_idx].data;
+    return &a->items[insert_idx].value;
 }
 
-void hashtbl_$type_erase(hashtbl_$type* a, unsigned hash)
+void hashtbl_$type_erase(hashtbl_$type* a, $key_type key)
 {
     assert(a);
     if (a->size == 0) return;
-    unsigned hashidx = hash & (a->capacity - 1);
+    unsigned hashidx = $hash{key} & (a->capacity - 1);
     unsigned offset = 0;
     while (offset < a->capacity)
     {
         unsigned idx = (hashidx + offset++) % a->capacity;
         hashtbl_item* i = &a->items[idx];
 
-        // Slot is valid and with a matching hash, ditch it
-        if (i->state == VALID && i->hash == hash)
+        // Slot is valid and with a matching key, ditch it
+        if (i->state == VALID && $equals{i->key, key})
         {
             i->state = ERASED;
-            $dtor{i->data}
+            $dtor{i->value}
             a->size--;
             return;
         }
@@ -144,13 +144,17 @@ void hashtbl_$type_erase(hashtbl_$type* a, unsigned hash)
 void hashtbl_$type_print(hashtbl_$type* a)
 {
     assert(a);
+    printf("[");
     for (unsigned i = 0; i < a->capacity; ++i)
     {
         if (a->items[i].state == VALID)
         {
-            printf("%d: ", a->items[i].hash);
-            printf("%d,", a->items[i].data);
+            $print_key{a->items[i].key};
+            printf(":");
+            $print{a->items[i].value};
+            printf(",");
         }
     }
+    printf("]");
 }
 

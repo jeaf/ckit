@@ -50,26 +50,34 @@ void test_hashtbl()
     printf("Testing hashtbl\n");
     hashtbl_int a;
     hashtbl_int_ctor(&a);
-    *hashtbl_int_lookup(&a, 123) = -1;
-    *hashtbl_int_lookup(&a, 9999) = 3;
+    key_struct k = {1,2};
+    *hashtbl_int_lookup(&a, k) = -1;
+    k.a = 3;
+    *hashtbl_int_lookup(&a, k) = 3;
     hashtbl_int_print(&a);
     printf("\n");
-    printf("Value should be 3: %d\n", *hashtbl_int_lookup(&a, 9999));
-    printf("Value should be 3: %d\n", *hashtbl_int_get(&a, 9999));
-    printf("Value should be NULL: %d\n", hashtbl_int_get(&a, 44444));
+    printf("Value should be 3: %d\n", *hashtbl_int_lookup(&a, k));
+    printf("Value should be 3: %d\n", *hashtbl_int_get(&a, k));
+    k.a = 999;
+    printf("Value should be NULL: %d\n", hashtbl_int_get(&a, k));
 
     // Add stuff until table needs to grow
-    *hashtbl_int_lookup(&a, 999    ) = 2;
-    *hashtbl_int_lookup(&a, 99     ) = 4;
-    *hashtbl_int_lookup(&a, 9      ) = 5;
-    *hashtbl_int_lookup(&a, 5      ) = 6;
-    *hashtbl_int_lookup(&a, 4      ) = 7;
-    *hashtbl_int_lookup(&a, 1239999) = 8;
+    *hashtbl_int_lookup(&a, k) = 2;
+    k.b = 88;
+    *hashtbl_int_lookup(&a, k) = 4;
+    k.b = 87;
+    *hashtbl_int_lookup(&a, k) = 5;
+    k.b = 86;
+    *hashtbl_int_lookup(&a, k) = 6;
+    k.b = 85;
+    *hashtbl_int_lookup(&a, k) = 7;
+    k.b = 84;
+    *hashtbl_int_lookup(&a, k) = 8;
 
     // Remove an item and check if it was removed
-    printf("Before removal: %d\n", *hashtbl_int_get(&a, 5));
-    hashtbl_int_erase(&a, 5);
-    int* removed_val = hashtbl_int_get(&a, 5);
+    printf("Before removal: %d\n", *hashtbl_int_get(&a, k));
+    hashtbl_int_erase(&a, k);
+    int* removed_val = hashtbl_int_get(&a, k);
     if (removed_val)
     {
         printf("After removal: failure: value was not removed.\n");
