@@ -6,7 +6,7 @@ import re
 import sys
 
 # The list of available templates
-templates = 'array hashtbl heap'.split()
+templates = 'array deque hashtbl heap'.split()
 
 def process_config_blocks(s):
     if s.find('{') < 0:
@@ -44,7 +44,8 @@ def load_config():
 config = load_config()
 
 # Add default types
-config['int'] = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
+config['int']    = {'print': r'printf("%d", \1);', 'lessthan': r'\1 < \2'}
+config['double'] = {'print': r'printf("%f", \1);', 'lessthan': r'\1 < \2'}
 
 # The list of standard include files that we will need
 std_incs = 'assert math stdbool stdio stdlib string'.split()

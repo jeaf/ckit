@@ -45,6 +45,24 @@ void test_array()
     printf("\n");
 }
 
+void test_deque()
+{
+    printf("Testing deque\n");
+    deque_double dd;
+    deque_double_ctor(&dd);
+    *deque_double_pushback(&dd) = 3.9;
+    *deque_double_pushback(&dd) = 4.9;
+    *deque_double_pushback(&dd) = 5.9;
+    *deque_double_pushback(&dd) = 6.9;
+    deque_double_popfront(&dd);
+    printf("Size should be 3: %d\n", dd.size);
+    printf("Front should be 4.9: %.1f\n", *deque_double_front(&dd));
+    *deque_double_pushback(&dd) = 7.9;
+    deque_double_popfront(&dd);
+    printf("Size should be 3: %d\n", dd.size);
+    printf("Front should be 5.9: %.1f\n", *deque_double_front(&dd));
+}
+
 void test_hashtbl()
 {
     printf("Testing hashtbl\n");
@@ -126,6 +144,7 @@ void test_heap()
 int main()
 {
     test_array();
+    test_deque();
     test_hashtbl();
     test_heap();
     return 0;
