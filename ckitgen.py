@@ -6,7 +6,7 @@ import re
 import sys
 
 # The list of available templates
-templates = 'array deque hashtbl heap'.split()
+templates = 'array deque_linkedlist hashtbl heap'.split()
 
 def process_config_blocks(s):
     if s.find('{') < 0:
