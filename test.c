@@ -61,6 +61,13 @@ void test_deque()
     deque_double_popfront(&dd);
     printf("Size should be 3: %d\n", dd.size);
     printf("Front should be 5.9: %.1f\n", *deque_double_front(&dd));
+    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
+    *deque_double_pushback(&dd) = 9999.999;
+    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
+    *deque_double_pushback(&dd) = 888.88;
+    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
+
+
     deque_double_dtor(&dd);
 }
 
