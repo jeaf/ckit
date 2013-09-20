@@ -11,14 +11,14 @@ typedef struct
     hashtbl_item* items;
     unsigned      size;
     unsigned      capacity;
-} hashtbl_$type;
+} $name;
 
-void   hashtbl_$type_ctor  (hashtbl_$type* a);
-void   hashtbl_$type_dtor  (hashtbl_$type* a);
+void   $name_ctor  ($name* a);
+void   $name_dtor  ($name* a);
 
-$type* hashtbl_$type_get   (hashtbl_$type* a, $key_type key);
-$type* hashtbl_$type_lookup(hashtbl_$type* a, $key_type key);
-void   hashtbl_$type_erase (hashtbl_$type* a, $key_type key);
+$type* $name_get   ($name* a, $key_type key);
+$type* $name_lookup($name* a, $key_type key);
+void   $name_erase ($name* a, $key_type key);
 
-void   hashtbl_$type_print (hashtbl_$type* a);
+void   $name_print ($name* a);
 

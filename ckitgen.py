@@ -102,6 +102,7 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
                             line = dtor_re.sub(config[typename]['dtor'], line)
                         else:
                             continue
+                    line = line.replace('$name', name)
                     line = line.replace('$type', typename)
                     if 'key_type' in attrs:
                         key_typename = attrs['key_type']

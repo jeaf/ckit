@@ -1,6 +1,6 @@
-void hashtbl_$type_grow(hashtbl_$type* a)
+void $name_grow($name* a)
 {
-    hashtbl_$type new_ht;
+    $name new_ht;
     new_ht.size     = 0;
     new_ht.capacity = a->capacity << 1;
     new_ht.items    = calloc(new_ht.capacity, sizeof(hashtbl_item));
@@ -8,14 +8,14 @@ void hashtbl_$type_grow(hashtbl_$type* a)
     {
         if (a->items[i].state == VALID)
         {
-            *hashtbl_$type_lookup(&new_ht, a->items[i].key) = a->items[i].value;
+            *$name_lookup(&new_ht, a->items[i].key) = a->items[i].value;
         }
     }
     free(a->items);
     *a = new_ht;
 }
 
-void hashtbl_$type_ctor(hashtbl_$type* a)
+void $name_ctor($name* a)
 {
     assert(a);
     a->size     = 0;
@@ -23,14 +23,14 @@ void hashtbl_$type_ctor(hashtbl_$type* a)
     a->items    = calloc(a->capacity, sizeof(hashtbl_item));
 }
 
-void hashtbl_$type_dtor(hashtbl_$type* a)
+void $name_dtor($name* a)
 {
     assert(a);
     free(a->items);
-    memset(a, 0, sizeof(hashtbl_$type));
+    memset(a, 0, sizeof($name));
 }
 
-$type* hashtbl_$type_get(hashtbl_$type* a, $key_type key)
+$type* $name_get($name* a, $key_type key)
 {
     assert(a);
     assert(a->capacity > 0);
@@ -61,7 +61,7 @@ $type* hashtbl_$type_get(hashtbl_$type* a, $key_type key)
     return 0;
 }
 
-$type* hashtbl_$type_lookup(hashtbl_$type* a, $key_type key)
+$type* $name_lookup($name* a, $key_type key)
 {
     assert(a);
     assert(a->capacity > 0);
@@ -71,7 +71,7 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, $key_type key)
     // First check if we need to grow the hashtbl
     if (((float)a->size / a->capacity) > 0.3)
     {
-        hashtbl_$type_grow(a);
+        $name_grow(a);
     }
     
     unsigned hashidx = $hash{key} & (a->capacity - 1);
@@ -113,7 +113,7 @@ $type* hashtbl_$type_lookup(hashtbl_$type* a, $key_type key)
     return &a->items[insert_idx].value;
 }
 
-void hashtbl_$type_erase(hashtbl_$type* a, $key_type key)
+void $name_erase($name* a, $key_type key)
 {
     assert(a);
     if (a->size == 0) return;
@@ -141,7 +141,7 @@ void hashtbl_$type_erase(hashtbl_$type* a, $key_type key)
     }
 }
 
-void hashtbl_$type_print(hashtbl_$type* a)
+void $name_print($name* a)
 {
     assert(a);
     printf("[");

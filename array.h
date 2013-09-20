@@ -3,13 +3,13 @@ typedef struct
     $type*   data;
     unsigned size;
     unsigned capacity;
-} array_$type;
+} $name;
 
-void   array_$type_ctor    (array_$type* a);
-void   array_$type_dtor    (array_$type* a);
+void   $name_ctor    ($name* a);
+void   $name_dtor    ($name* a);
 
-$type* array_$type_pushback(array_$type* a);
-void   array_$type_popback (array_$type* a);
+$type* $name_pushback($name* a);
+void   $name_popback ($name* a);
 
-void   array_$type_print   (array_$type* a);
+void   $name_print   ($name* a);
 

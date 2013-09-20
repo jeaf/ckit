@@ -1,10 +1,10 @@
-void array_$type_ctor(array_$type* a)
+void $name_ctor($name* a)
 {
     assert(a);
-    memset(a, 0, sizeof(array_$type));
+    memset(a, 0, sizeof($name));
 }
 
-void array_$type_dtor(array_$type* a)
+void $name_dtor($name* a)
 {
     assert(a);
     for (unsigned i = 0; i < a->size; ++i)
@@ -13,11 +13,11 @@ void array_$type_dtor(array_$type* a)
     }
     free(a->data);
     #ifndef NDEBUG
-        memset(a, 0, sizeof(array_$type));
+        memset(a, 0, sizeof($name));
     #endif
 }
 
-$type* array_$type_pushback(array_$type* a)
+$type* $name_pushback($name* a)
 {
     assert(a);
     if (a->size == a->capacity)
@@ -33,7 +33,7 @@ $type* array_$type_pushback(array_$type* a)
     return &a->data[a->size++];
 }
 
-void array_$type_popback(array_$type* a)
+void $name_popback($name* a)
 {
     assert(a);
     assert(a->size);
@@ -41,7 +41,7 @@ void array_$type_popback(array_$type* a)
     $dtor{a->data[a->size]}
 }
 
-void array_$type_print(array_$type* a)
+void $name_print($name* a)
 {
     assert(a);
     printf("[");

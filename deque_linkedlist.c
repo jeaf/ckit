@@ -1,10 +1,10 @@
-void deque_$type_ctor(deque_$type* d)
+void $name_ctor($name* d)
 {
     assert(d);
-    memset(d, 0, sizeof(deque_$type));
+    memset(d, 0, sizeof($name));
 }
 
-void deque_$type_dtor(deque_$type* d)
+void $name_dtor($name* d)
 {
     assert(d);
     unsigned elem_idx = 0;
@@ -16,18 +16,18 @@ void deque_$type_dtor(deque_$type* d)
             $dtor{d->first_blk->elems[blk_idx]}
         }
         blk_idx = 0;
-        deque_$type_blk* next = d->first_blk->next;
+        $name_blk* next = d->first_blk->next;
         free(d->first_blk);
         d->first_blk = next;
     }
 }
 
-$type* deque_$type_pushback(deque_$type* d)
+$type* $name_pushback($name* d)
 {
     assert(d);
     if (!d->last_blk)
     {
-        d->first_blk = calloc(1, sizeof(deque_$type_blk));
+        d->first_blk = calloc(1, sizeof($name_blk));
         d->last_blk = d->first_blk;
         d->first_blk_idx = 0;
         d->last_blk_idx = 0;
@@ -37,7 +37,7 @@ $type* deque_$type_pushback(deque_$type* d)
         assert(d->first_blk);
         assert(!d->first_blk->prev);
         assert(!d->last_blk->next);
-        d->last_blk->next = calloc(1, sizeof(deque_$type_blk));
+        d->last_blk->next = calloc(1, sizeof($name_blk));
         d->last_blk->next->prev = d->last_blk;
         d->last_blk = d->last_blk->next;
         d->last_blk_idx = 0;
@@ -54,7 +54,7 @@ $type* deque_$type_pushback(deque_$type* d)
     return &d->last_blk->elems[d->last_blk_idx];
 }
 
-$type* deque_$type_front(deque_$type* d)
+$type* $name_front($name* d)
 {
     assert(d);
     assert(d->size > 0);
@@ -62,7 +62,7 @@ $type* deque_$type_front(deque_$type* d)
     return &d->first_blk->elems[d->first_blk_idx];
 }
 
-void deque_$type_popfront(deque_$type* d)
+void $name_popfront($name* d)
 {
     assert(d);
     assert(d->size > 0);
@@ -72,12 +72,12 @@ void deque_$type_popfront(deque_$type* d)
     if (d->size == 0)
     {
         free(d->first_blk);
-        memset(d, 0, sizeof(deque_$type));
+        memset(d, 0, sizeof($name));
     }
     else if (d->first_blk_idx == (BLK_SIZE - 1))
     {
         d->first_blk_idx = 0;
-        deque_$type_blk* new_first = d->first_blk->next;
+        $name_blk* new_first = d->first_blk->next;
         new_first->prev = 0;
         free(d->first_blk);
         d->first_blk = new_first;
