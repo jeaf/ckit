@@ -43,10 +43,35 @@ $type* $name_pushback($name* d)
         }
         else
         {
+            unsigned old_capacity = d->capacity;
             d->capacity *= 2;
             d->buf      = realloc(d->buf, sizeof($type) * d->capacity);
             assert(d->buf);
-            assert(!"incomplete, must split the two parts");
+
+            // If the buffer is full, and front is 0, it means that the buf
+            // was filled like a normal array (i.e., only with pushbacks),
+            // so we don't need to move stuff around as much
+            if (d->front == 0)
+            {
+                assert(d->back + 1 < d->capacity);
+                memset(&d->buf[d->back + 1],
+                       0,
+                       sizeof($type) * (d->capacity - d->size));
+            }
+            else
+            {
+                // We need to move the data between front and old capacity
+                // to between new front and new capacity
+                memcpy(&d->buf[d->capacity - (old_capacity - d->front)],
+                       &d->buf[d->front],
+                       sizeof($type) * (old_capacity - d->front));
+                d->front = d->capacity - (old_capacity - d->front);
+
+                // Set the memory between back and front to zero
+                memset(&d->buf[d->back + 1],
+                       0,
+                       sizeof($type) * (d->front - d->back + 1));
+            }
         }
     }
     assert(d->capacity > d->size);
