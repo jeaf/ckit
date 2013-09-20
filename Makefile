@@ -9,7 +9,7 @@ test.exe: ckit.o test.o test_struct.o
 ckit.o: ckit.c ckit.h
 	$(TCC) $(TCC_OPTS) -c $<
 
-ckit.c: array.c array.h hashtbl.c hashtbl.h heap.c heap.h ckit.config ckitgen.py
+ckit.c: array.c array.h deque_circbuf.c deque_circbuf.h deque_linkedlist.c deque_linkedlist.h hashtbl.c hashtbl.h heap.c heap.h ckit.config ckitgen.py
 	$(PYTHON) ckitgen.py
 
 test_struct.o: test_struct.c test_struct.h

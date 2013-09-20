@@ -61,6 +61,7 @@ void test_deque()
     deque_double_popfront(&dd);
     printf("Size should be 3: %d\n", dd.size);
     printf("Front should be 5.9: %.1f\n", *deque_double_front(&dd));
+    deque_double_dtor(&dd);
 }
 
 void test_hashtbl()
