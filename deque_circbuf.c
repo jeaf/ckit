@@ -34,12 +34,14 @@ $type* $name_pushback($name* d)
 {
     $name_ASSERT_BASE
 
+    // If the buffer is full, we need to resize
     if (d->size == d->capacity)
     {
+        // When the capacity is 0, it is a special case
         if (d->capacity == 0)
-       {
+        {
             d->capacity = 1;
-            d->buf      = calloc(1, sizeof($type));
+            d->buf      = malloc(sizeof($type) * d->capacity);
         }
         else
         {
@@ -50,15 +52,9 @@ $type* $name_pushback($name* d)
 
             // If the buffer is full, and front is 0, it means that the buf
             // was filled like a normal array (i.e., only with pushbacks),
-            // so we don't need to move stuff around as much
-            if (d->front == 0)
-            {
-                assert(d->back + 1 < d->capacity);
-                memset(&d->buf[d->back + 1],
-                       0,
-                       sizeof($type) * (d->capacity - d->size));
-            }
-            else
+            // so we don't need to move stuff around as much. We only handle the
+            // case when front was not 0.
+            if (d->front != 0)
             {
                 // We need to move the data between front and old capacity
                 // to between new front and new capacity
@@ -66,16 +62,19 @@ $type* $name_pushback($name* d)
                        &d->buf[d->front],
                        sizeof($type) * (old_capacity - d->front));
                 d->front = d->capacity - (old_capacity - d->front);
-
-                // Set the memory between back and front to zero
-                memset(&d->buf[d->back + 1],
-                       0,
-                       sizeof($type) * (d->front - d->back + 1));
             }
         }
     }
     assert(d->capacity > d->size);
-    d->back = (d->back + 1) % d->capacity;
+    if (d->size == 0)
+    {
+        d->front = 0;
+        d->back  = 0;
+    }
+    else
+    {
+        d->back = (d->back + 1) % d->capacity;
+    }
     ++d->size;
     
     $name_ASSERT_NOTEMPTY
