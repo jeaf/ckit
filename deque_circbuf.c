@@ -14,7 +14,10 @@
 void $name_ctor($name* d)
 {
     assert(d);
-    memset(d, 0, sizeof($name));
+
+    d->buf      = 0;
+    d->size     = 0;
+    d->capacity = 0;
     #ifndef NDEBUG
         d->dbgstate = CONSTRUCTED;
     #endif
@@ -51,9 +54,8 @@ $type* $name_pushback($name* d)
             assert(d->buf);
 
             // If the buffer is full, and front is 0, it means that the buf
-            // was filled like a normal array (i.e., only with pushbacks),
-            // so we don't need to move stuff around as much. We only handle the
-            // case when front was not 0.
+            // does not loop around, so we don't need to move stuff around as
+            // much. We only handle the case when front is not 0.
             if (d->front != 0)
             {
                 // We need to move the data between front and old capacity

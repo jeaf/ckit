@@ -1,7 +1,22 @@
 #include "ckit.h"
 #include "test_struct.h"
 
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
+
+#define TEST_BEGIN bool success = true;
+#define TEST_END\
+    if (success) {\
+        printf("OK\n");\
+    } else {\
+        printf("Failed\n");\
+    }
+#define CHECK(cond) \
+    if (!(cond)) { \
+        printf("    Error(%d): %s\n", __LINE__, #cond); \
+        success = false; \
+    }
 
 void test_array()
 {
@@ -47,7 +62,9 @@ void test_array()
 
 void test_deque()
 {
-    printf("Testing deque\n");
+    TEST_BEGIN
+
+    printf("Testing deque...\n");
     deque_double dd;
     deque_double_ctor(&dd);
     *deque_double_pushback(&dd) = 3.9;
@@ -55,20 +72,26 @@ void test_deque()
     *deque_double_pushback(&dd) = 5.9;
     *deque_double_pushback(&dd) = 6.9;
     deque_double_popfront(&dd);
-    printf("Size should be 3: %d\n", dd.size);
-    printf("Front should be 4.9: %.1f\n", *deque_double_front(&dd));
+    CHECK(dd.size == 3);
+    CHECK(*deque_double_front(&dd) == 4.9);
     *deque_double_pushback(&dd) = 7.9;
     deque_double_popfront(&dd);
-    printf("Size should be 3: %d\n", dd.size);
-    printf("Front should be 5.9: %.1f\n", *deque_double_front(&dd));
-    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
+    CHECK(dd.size == 3);
+    CHECK(*deque_double_front(&dd) == 5.9);
     *deque_double_pushback(&dd) = 9999.999;
-    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
     *deque_double_pushback(&dd) = 888.88;
-    printf("Capacity: %d, size: %d, front: %d, back: %d\n", dd.capacity, dd.size, dd.front, dd.back);
-
+    deque_double_popfront(&dd);
+    deque_double_popfront(&dd);
+    deque_double_popfront(&dd);
+    deque_double_popfront(&dd);
+    deque_double_popfront(&dd);
+    CHECK(dd.size == 0);
+    *deque_double_pushback(&dd) = 1.123456;
+    CHECK(*deque_double_front(&dd) == 1.123456);
 
     deque_double_dtor(&dd);
+
+    TEST_END
 }
 
 void test_hashtbl()
