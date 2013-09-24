@@ -87,6 +87,10 @@ with open('ckit.h', 'w') as outf_h, open('ckit.c', 'w') as outf_c:
             for line in attrs['struct'].split('\n'):
                 outf_h.write('    {};\n'.format(line.strip()))
             outf_h.write('} ' + name + ';\n\n')
+        elif 'enum' in attrs:
+            outf_h.write('typedef enum\n{\n')
+            outf_h.write(attrs['enum'])
+            outf_h.write('} ' + name + ';\n\n')
         elif 'template' in attrs:
             template_name = attrs['template']
             typename      = attrs['type']

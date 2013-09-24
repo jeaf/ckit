@@ -91,6 +91,14 @@ void test_deque()
 
     deque_double_dtor(&dd);
 
+    deque_ui dui;
+    deque_ui_ctor(&dui);
+    *deque_ui_pushback(&dui) = UIE_MOUSEDOWN;
+    *deque_ui_pushback(&dui) = UIE_MOUSEUP;
+    CHECK(dui.size == 2);
+    CHECK(*deque_ui_front(&dui) == UIE_MOUSEDOWN);
+    deque_ui_dtor(&dui);
+
     TEST_END
 }
 
