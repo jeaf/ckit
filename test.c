@@ -5,13 +5,17 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define TEST_BEGIN bool success = true;
+#define TEST_BEGIN(name)\
+    bool success = true; \
+    printf("Testing %s...\n", #name);
+
 #define TEST_END\
     if (success) {\
         printf("OK\n");\
     } else {\
         printf("Failed\n");\
     }
+
 #define CHECK(cond) \
     if (!(cond)) { \
         printf("    Error(%d): %s\n", __LINE__, #cond); \
@@ -20,13 +24,12 @@
 
 void test_array()
 {
-    printf("Testing array\n");
+    TEST_BEGIN(array);
     array_int a;
     array_int_ctor(&a);
     *array_int_pushback(&a) = 3;
     *array_int_pushback(&a) = 7;
-    array_int_print(&a);
-    printf("\n");
+    CHECK(a.size == 2);
     array_int_dtor(&a);
 
     test_struct ts;
@@ -40,8 +43,6 @@ void test_array()
     ts.a = 987;
     ts.b = 0.0f;
     *array_test_struct_pushback(&b) = ts;
-    array_test_struct_print(&b);
-    printf("\n");
     array_test_struct_dtor(&b);
 
     array_model am;
@@ -56,15 +57,13 @@ void test_array()
     pt->x = 4.0;
     pt->y = 7.0;
     pt->z = 99.0;
-    array_model_print(&am);
-    printf("\n");
+    TEST_END
 }
 
 void test_deque()
 {
-    TEST_BEGIN
+    TEST_BEGIN(deque)
 
-    printf("Testing deque...\n");
     deque_double dd;
     deque_double_ctor(&dd);
     *deque_double_pushback(&dd) = 3.9;
@@ -104,19 +103,17 @@ void test_deque()
 
 void test_hashtbl()
 {
-    printf("Testing hashtbl\n");
+    TEST_BEGIN(hashtbl)
     hashtbl_int a;
     hashtbl_int_ctor(&a);
     key_struct k = {1,2};
     *hashtbl_int_lookup(&a, k) = -1;
     k.a = 3;
     *hashtbl_int_lookup(&a, k) = 3;
-    hashtbl_int_print(&a);
-    printf("\n");
-    printf("Value should be 3: %d\n", *hashtbl_int_lookup(&a, k));
-    printf("Value should be 3: %d\n", *hashtbl_int_get(&a, k));
+    CHECK(*hashtbl_int_lookup(&a, k) == 3);
+    CHECK(*hashtbl_int_get(&a, k) == 3);
     k.a = 999;
-    printf("Value should be NULL: %d\n", hashtbl_int_get(&a, k));
+    CHECK(!hashtbl_int_get(&a, k));
 
     // Add stuff until table needs to grow
     *hashtbl_int_lookup(&a, k) = 2;
@@ -132,34 +129,28 @@ void test_hashtbl()
     *hashtbl_int_lookup(&a, k) = 8;
 
     // Remove an item and check if it was removed
-    printf("Before removal: %d\n", *hashtbl_int_get(&a, k));
     hashtbl_int_erase(&a, k);
-    int* removed_val = hashtbl_int_get(&a, k);
-    if (removed_val)
-    {
-        printf("After removal: failure: value was not removed.\n");
-    }
-    else
-    {
-        printf("After removal: success: value was correctly removed.\n");
-    }
+    CHECK(!hashtbl_int_get(&a, k))
+
+    TEST_END
 }
 
 void test_heap()
 {
-    printf("Testing heap\n");
+    TEST_BEGIN(heap)
     array_int a;
     array_int_ctor(&a);
     *array_int_pushback(&a) = 3;
-    *array_int_pushback(&a) = 4;
     *array_int_pushback(&a) = 9;
     *array_int_pushback(&a) = 1;
-    *array_int_pushback(&a) = 2;
     *array_int_pushback(&a) = 13;
     *array_int_pushback(&a) = 8;
     heapsort_int(a.data, a.size);
-    array_int_print(&a);
-    printf("\n");
+    CHECK(a.data[0] == 1)
+    CHECK(a.data[1] == 3)
+    CHECK(a.data[2] == 8)
+    CHECK(a.data[3] == 9)
+    CHECK(a.data[4] == 13)
 
     array_point ap;
     array_point_ctor(&ap);
@@ -175,9 +166,7 @@ void test_heap()
     p.z = 1;
     *array_point_pushback(&ap) = p;
     heapsort_point(ap.data, ap.size);
-    array_point_print(&ap);
-    printf("\n");
-
+    TEST_END
 }
 
 int main()
